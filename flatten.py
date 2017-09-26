@@ -18,8 +18,10 @@ if __name__ == "__main__":
     )
     success = True
     for i, test in enumerate(tests):
-        if flatten(test[0]) != test[1]:
+        val = flatten(test[0])
+        expect = test[1]
+        if val != expect:
             success = False
-            print("✕ Failed on test", i, flatten(test[0]), "!=", test[1])
+            print("✕ Failed on test", i, val, "!=", expect)
         else:
             print("✓ Test", i)

@@ -23,8 +23,10 @@ if __name__ == "__main__":
     )
     success = True
     for i, test in enumerate(tests):
-        if apply("F", test[0], test[1]) != test[2]:
+        val = apply("F", test[0], test[1])
+        expect = test[2]
+        if val != expect:
             success = False
-            print("✕ Failed on test", i, apply("F", test[0], test[1]), "!=", test[2])
+            print("✕ Failed on test", i, val, "!=", expect)
         else:
             print("✓ Test", i)
