@@ -1,7 +1,7 @@
 start X
 rule X -> F L D X R X U L T E X V S B
 length 100
-depth 12
+depth 9
 cmd X nop
 cmd F fd
 cmd B bk

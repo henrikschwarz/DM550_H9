@@ -1,6 +1,7 @@
 start F X
 rule X -> X R Y F
 rule Y -> F X L Y
+color travelled
 length 3
 depth 13
 cmd F fd
