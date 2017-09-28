@@ -21,19 +21,17 @@ def parse(fdl_file):
         "width": 1.0,
         "cmds": {},
         "rules": {},
-        "color": "rainbow"
+        "color": ["rainbow"]
     }
     for line in file:
         split = line.strip().split(" ")
         cmd = split[0].lower()
         args = split[1:]
-        if cmd in ["start"]: # list params
+        if cmd in ["start", "color"]: # list params
             data[cmd] = args
-        if cmd in ["color"]: # str params
-            data[cmd] = " ".join(args)
         elif cmd in ["depth", "length"]: # int params
             data[cmd] = int(float(args[0]))
-        elif cmd in ["width"]: # float params
+        elif cmd == "width": # float params
             data[cmd] = float(args[0])
         elif cmd == "cmd":
             data["cmds"][args[0]] = (args[1], list(map(

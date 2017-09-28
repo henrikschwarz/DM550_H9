@@ -8,14 +8,17 @@ from compute import compute
 from execute import execute
 from random import random
 
-RAINBOW_LEN = 200
 def run(trtl, fdl):
     trtl.speed(0)
     data = parse(fdl)
     length = data["length"]
     col = data["color"]
+    colLen = 200
+    if col:
+        if len(col) >= 2:
+            colLen = int(col[1])
+        col = col[0]
     if col and col not in ["rainbow", "travelled"]:
-        col = data["color"]
         if col == "random":
             col = (random(), random(), random())
         trtl.pencolor(col)
@@ -40,10 +43,9 @@ def run(trtl, fdl):
 
         # update colors if needed
         if col == "rainbow":
-            dist = trtl.distance(0, 0) % RAINBOW_LEN / RAINBOW_LEN
-            trtl.pencolor(colorsys.hsv_to_rgb(dist, 1, 0.8))
+            trtl.pencolor(colorsys.hsv_to_rgb(trtl.distance(0, 0) % colLen / colLen, 1, 0.8))
         elif col == "travelled":
-            trtl.pencolor(colorsys.hsv_to_rgb(dist % RAINBOW_LEN / RAINBOW_LEN, 1, 0.8))
+            trtl.pencolor(colorsys.hsv_to_rgb(dist % colLen / colLen, 1, 0.8))
         result = execute(
             trtl=trtl,
             length=length,
