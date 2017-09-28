@@ -18,6 +18,7 @@ def parse(fdl_file):
     data = {
         "length": 1,
         "depth": 1,
+        "width": 1.0,
         "cmds": {},
         "rules": {},
         "color": "rainbow"
@@ -31,7 +32,9 @@ def parse(fdl_file):
         if cmd in ["color"]: # str params
             data[cmd] = " ".join(args)
         elif cmd in ["depth", "length"]: # int params
-            data[cmd] = int(args[0])
+            data[cmd] = int(float(args[0]))
+        elif cmd in ["width"]: # float params
+            data[cmd] = float(args[0])
         elif cmd == "cmd":
             data["cmds"][args[0]] = (args[1], list(map(
                 convert_str,
