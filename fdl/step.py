@@ -2,32 +2,31 @@ from apply import apply
 from flatten import flatten
 
 def step(rules, state):
-    """Takes a state and a list of rules, applies rules to all states
-    Rules format: [["Rule 1 name", ["Rule 1 def"]], ...]"""
-    for rule in rules:
-        state = apply(rule[0], rule[1], state)
+    """Takes a state and a list of rules, applies rules to all states"""
+    for ruleName, ruleDef in rules.items():
+        state = apply(ruleName, ruleDef, state)
 
     return flatten(state)
 
 if __name__ == "__main__":
     tests = (
         ( # first test
-            ( # rules
-                ["F", ["A", "B"]],
-                ["G", ["C", "D"]]
-            ),
+            { # rules
+                "F": ["A", "B"],
+                "G": ["C", "D"]
+            },
             list("FRGRF"), # state
             list("ABRCDRAB") # expected
         ),
         (
-            [], # rules
+            {}, # rules
             list("FRGRF"), # state
             list("FRGRF") # expected
         ),
         (
-            ( # rules
-                ["F", ["A", "B"]],
-            ),
+            { # rules
+                "F": ["A", "B"],
+            },
             list("GRG"), # state
             list("GRG") # expected
         ),

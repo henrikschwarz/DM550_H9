@@ -10,19 +10,19 @@ if __name__ == "__main__":
     tests = (
         ( # first test
             3, # depth
-            ( # rules
-                ["F", ["A", "F", "B"]],
-                ["G", ["F"]]
-            ),
+            { # rules
+                "F": ["A", "F", "B"],
+                "G": ["F"]
+            },
             list("FRG"), # state
             list("AAAFBBBRAAFBB") # expected
         ),
         (
             0, # depth
-            ( # rules
-                ["F", ["A", "F", "B"]],
-                ["G", ["F"]]
-            ),
+            { # rules
+                "F": ["A", "F", "B"],
+                "G": ["F"]
+            },
             list("FRG"), # state
             list("FRG") # expected
         )
