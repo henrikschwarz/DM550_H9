@@ -1,45 +1,40 @@
 import turtle
-
 bob = turtle.Turtle()
+def line(x):
+    bob.fd(x)
+    bob.lt(180)
+    bob.fd(x)
+    bob.lt(180)
 
-def drawRightbranch(x,s): #x is depth, s is size
+def branch(x, d, color, colorstep):
+    bob.width(0.5 + 0.08 * d ** 2)
+    bob.color([0, color, 0])
+    newx = x * (7 / 10)
+    angle = 30
+    bob.fd(x)
+    bob.lt(angle)
+    if d != 0:  # left branch
+        branch(newx, d - 1, color + colorstep, colorstep)
+    else:
+        line(newx)
+    bob.rt(angle * 2)
+    if d != 0:  # right branch
+        branch(newx, d - 1, color + colorstep, colorstep)
+    else:
+        line(newx)
+    bob.rt(180 - angle)
+    bob.penup()
+    bob.fd(x)
+    bob.pendown()
+    bob.rt(180)
 
-    for i in range(x):
-        bob.fd(s)
-        bob.rt(60)
-        s = s/2
-    return s
-def climbBack(c,t,s): #how much we climb back, t = 0 if we turned right and 1 if left
-    if t == 0:
-        while c > 0:
-            bob.lt(60)
-            bob.fd(s)
-            c = c-1
-            s = s*2
-    if t == 1:
-        while c > 0:
-            bob.lt(60)
-            bob.fd(s)
-            s = s*2
-            c = c-1
-    return s
-def drawLeftBranch(x,s):
-    for i in range(x):
-        bob.fd(s)
-        bob.lt(60)
-        s = s/2
-    return s
-
-
-def plantATree(x,s):
+def plantATree(x, d):
+    color = 0.3
+    colorstep = (1 - color) / d
+    turtle.tracer(100, 16)
+    # bob.speed(0)
     bob.lt(90)
-    LenDep = drawLeftBranch(x,s)
-    c = 1
-    while c < x:
-    #loop to climb back until depth 1
-        climbBack(c,1,LenDep)
-        LenDep = 2*LenDep
-        c = c +1
+    branch(x, d, color, colorstep)
+    turtle.exitonclick()
 
-
-plantATree(5,100)
+plantATree(100, 12)
