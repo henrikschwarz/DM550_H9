@@ -24,7 +24,7 @@ def run(trtl, fdl):
         rules=data["rules"],
         state=data["start"],
     )
-    turtle.tracer(100)
+    turtle.tracer(500)
     for cmdName in commands:
         cmd = data["cmds"][cmdName]
         if col == "rainbow":
