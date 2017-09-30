@@ -1,10 +1,56 @@
+"""Contains FDL-related functions. Generally you only want `run`"""
+
+# overwrites built-in :(
+def apply(ruleName, ruleDef, state):
+    """Replaces every occurence of a rule in a state with the rules definition"""
+    return list(map(
+        lambda key: ruleDef if key == ruleName else key,
+        state
+    ))
+
+def flatten(nested_list):
+    """Flattens a list"""
+    flattened = []
+    for val in nested_list:
+        if isinstance(val, list):
+            flattened.extend(flatten(val))
+        else:
+            flattened.append(val)
+    return flattened
+
+def step(rules, state):
+    """Takes a state and a list of rules, applies rules to all states"""
+    for ruleName, ruleDef in rules.items():
+        state = apply(ruleName, ruleDef, state)
+
+    return flatten(state)
+
+def compute(depth, rules, state):
+    """Repeatedly inserts rules into a state"""
+    for _ in range(0, depth):
+        state = step(rules, state)
+    return state
+
+def execute(trtl, length, cmd, args):
+    """Executes a command on a turtle"""
+    if cmd == "scale":
+        return length * float(args[0])
+    elif cmd == "nop":
+        return length
+    else:
+        method = getattr(trtl, cmd)
+        if cmd in ["fd", "bk"]:
+            args = [float(length)]
+        method(*args)
+
 def parse(fdl_file):
     """Parses an FDL file into a dictionary of format:
     {
         start: ["F"],
         length: 1,
         depth: 1,
-        color: "red",
+        width: 1.0,
+        color: ["rainbow"],
         rules: {
             "F": ["A", "B", "C"],
             "G": ["X, "Y", "Z"]
@@ -48,48 +94,7 @@ def convert_str(string):
     try:
         if "." in string:
             return float(string)
-        else:
-            return int(string)
+        return int(string)
     except (ValueError, TypeError):
         pass
     return string
-
-if __name__ == "__main__":
-    tests = (
-        ( # first test
-            "../files/dragon.fdl",
-            {
-                "start": ["F", "X"],
-                "length": 3,
-                "depth": 13,
-                "rules": {
-                    "X": ["X", "R", "Y", "F"],
-                    "Y": ["F", "X", "L", "Y"],
-                },
-                "cmds": {
-                    "F": ("fd", []),
-                    "X": ("nop", []),
-                    "Y": ("nop", []),
-                    "L": ("lt", [90]),
-                    "R": ("rt", [90]),
-                }
-            }
-        ),
-    )
-    success = True
-    for i, test in enumerate(tests):
-        val = parse(test[0])
-        expect = test[1]
-        if val != expect:
-            success = False
-            print("✕ Failed on test", i)
-            for key in val:
-                if key not in expect:
-                    print("    Extra key:", key)
-                elif val[key] != expect[key]:
-                    print("    Different value:", key, val[key], "!=", expect[key])
-            for key in expect2:
-                if key not in val:
-                    print("    Missing key:", key)
-        else:
-            print("✓ Test", i)
