@@ -1,0 +1,9 @@
+start X
+rule X -> F L D X
+length 1
+depth 2000
+width 2
+cmd X nop
+cmd F fd
+cmd L lt 7.5
+cmd D scale 1.002
