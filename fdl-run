@@ -14,6 +14,8 @@ if sys.argv[-1] != __file__:
     trtl.speed(0)
     turtle.tracer(100)
     run(trtl, "files/"+file)
+    turtle.update()
+    turtle.mainloop()
 else:
     print("Specify file as last argument:")
     print("  $ " + " ".join(sys.argv) + " fern.fdl")

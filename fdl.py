@@ -147,5 +147,3 @@ def run(trtl, fdl):
 
         if cmd[0] == "scale":
             length = result
-    turtle.update()
-    turtle.mainloop()
