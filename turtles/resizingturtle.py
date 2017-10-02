@@ -23,11 +23,9 @@ class ResizingTurtle(turtle.Turtle):
         self._resize()
         self._applyresize()
 
-    def _update(self):
-        super()._update()
-        pos = self._position
-        x = int(pos[0])
-        y = int(pos[1])
+    def _update(self, *args, **kwargs):
+        super()._update(*args, **kwargs)
+        x, y = map(int, self._position)
 
         resized = False
         if x < self._boundingBox[0][0]:
@@ -47,10 +45,8 @@ class ResizingTurtle(turtle.Turtle):
             self._resize()
 
     def _resize(self):
-        minX = self._boundingBox[0][0]
-        maxX = self._boundingBox[1][0]
-        minY = self._boundingBox[0][1]
-        maxY = self._boundingBox[1][1]
+        minX, minY = self._boundingBox[0]
+        maxX, maxY = self._boundingBox[1]
 
         width = maxX - minX
         height = maxY - minY
