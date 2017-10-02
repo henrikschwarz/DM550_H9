@@ -13,7 +13,7 @@ class ResizingTurtle(turtle.Turtle):
     ]
     _coordinates = ()
     _lastCoordinates = ()
-    resizeDelay = 0 # ms between updates to world coordinates - useful for performance
+    resizeDelay = 16 # ms between updates to world coordinates - useful for performance
     padding = 10
     ratio = 1 # width / height
 
@@ -23,8 +23,8 @@ class ResizingTurtle(turtle.Turtle):
         self._resize()
         self._applyresize()
 
-    def _drawturtle(self):
-        super()._drawturtle()
+    def _update(self):
+        super()._update()
         pos = self._position
         x = int(pos[0])
         y = int(pos[1])
@@ -66,7 +66,7 @@ class ResizingTurtle(turtle.Turtle):
             if not self._timerRunning:
                 if self.resizeDelay:
                     self._timerRunning = True
-                    turtle.ontimer(self._applyresize, 1000)
+                    turtle.ontimer(self._applyresize, self.resizeDelay)
                 else:
                     self._applyresize()
     
