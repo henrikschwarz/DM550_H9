@@ -2,21 +2,33 @@
 
 import turtle
 import sys
+import os
 from turtles.resizingturtle import ResizingTurtle
 from fdl import run
 
-if sys.argv[-1] != __file__:
-    file = sys.argv[-1]
-    if file[-4:] != ".fdl":
-        file = file + ".fdl"
-    
+def runner(file):
     trtl = ResizingTurtle()
     trtl.speed(0)
     turtle.tracer(100)
     run(trtl, "files/"+file)
     turtle.update()
     turtle.mainloop()
+if sys.argv[-1] != __file__:
+    file = sys.argv[-1]
+    if file[-4:] != ".fdl":
+        file = file + ".fdl"
+    runner(file)
 else:
-    print("Specify file as last argument:")
-    print("  $ " + " ".join(sys.argv) + " fern.fdl")
-    print("  $ " + " ".join(sys.argv) + " fern")
+    cwd = os.getcwd()
+    n = 1
+    d = {}
+    cwd = cwd + "/files"
+    print(str("Type integers between 1-") + str(len(os.listdir(cwd))) + str(" to draw the following fdl files"))
+    for filename in os.listdir(cwd):
+        if filename.endswith(".fdl"):
+            print(str(n) + " : " + os.path.join(filename))
+            d[str(n)] = str(os.path.join(filename))
+            n += 1
+    invar = str(input())
+    file = d.get(invar)
+    runner(file)
