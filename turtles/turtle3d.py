@@ -128,7 +128,7 @@ class Turtle3D:
             Vec3(1, 0, 0), # forwards
             Vec3(0, 0, -1)  # left
         )
-        self._pos = Vec3(-100, -100, self.screenZ)
+        self._pos = Vec3(0, 0, self.screenZ)
         self.trtl.penup()
         self._update()
         self.trtl.pendown()
