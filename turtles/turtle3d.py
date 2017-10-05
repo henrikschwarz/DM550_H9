@@ -178,7 +178,6 @@ class Turtle3D:
     
     def _update(self):
         """Updates the position of our 2D turtle to reflect our new position"""
-        print("Updating", self._pos)
         screen_pos = self._world_to_screen(self._pos)
         self.trtl.goto(screen_pos)
 
@@ -210,7 +209,8 @@ class Turtle3D:
     def goto(self, x, y, z):
         if isinstance(x, list) or isinstance(x, tuple):
             x, y, z = x
-        self._pos = (x, y, z)
+        self._pos = Vec3(x, y, z)
+        self._update()
 
     def forward(self, length):
         self._pos += self.coord_sys[0] * length
@@ -223,7 +223,6 @@ class Turtle3D:
     def __getattr__(self, name):
         """Proxies methods that aren't our own to our turtle.
         Useful for e.g. pencolor while allowing us to implement movement ourselves"""
-        print("Getting", name)
         return getattr(self.trtl, name)
 
 if __name__ == "__main__":
