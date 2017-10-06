@@ -4,13 +4,16 @@ import turtle
 import sys
 import os
 from turtles.resizingturtle import ResizingTurtle
-from fdl import run
+from turtles.turtle3d import Turtle3D
+from fdl import run, parse
 
 def runner(file):
-    trtl = ResizingTurtle()
+    file = "files/"+file
+    parsed = parse(file)
+    trtl = Turtle3D() if parsed["3d"] else ResizingTurtle()
     trtl.speed(0)
     turtle.tracer(100)
-    run(trtl, "files/"+file)
+    run(trtl, file)
     turtle.update()
     turtle.mainloop()
 if sys.argv[-1] != __file__:

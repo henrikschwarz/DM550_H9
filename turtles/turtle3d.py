@@ -168,7 +168,10 @@ class Turtle3D:
 
     def _world_to_screen(self, point):
         """Converts a point expressed in world's coordinate system to a screen coordinate"""
-        ratio = self.screenZ / point.z
+        z = point.z
+        if z == 0:
+            z = 0.00000001
+        ratio = self.screenZ / z
         if ratio == 0:
             ratio = 0.00000001
         return (
@@ -201,12 +204,21 @@ class Turtle3D:
         )
     def down(self, angle):
         self.up(-angle)
+    def roll(self, angle):
+        rad = radians(angle)
+        newLeft = Vec3(0, cos(rad), sin(rad))
+        self._coord_sys = (
+            self._coord_sys[0],
+            self._point_to_world(newLeft)
+        )
     lt = left
     rt = right
     ut = up
     dt = down
+    yaw = left
+    pitch = up
 
-    def goto(self, x, y, z):
+    def goto(self, x, y=0, z=-100):
         if isinstance(x, list) or isinstance(x, tuple):
             x, y, z = x
         self._pos = Vec3(x, y, z)

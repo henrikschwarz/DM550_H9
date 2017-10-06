@@ -65,6 +65,7 @@ def parse(fdl_file):
     """
     file = open(fdl_file)
     data = {
+        "3d": False,
         "length": 1,
         "depth": 1,
         "width": 1.0,
@@ -82,6 +83,8 @@ def parse(fdl_file):
             data[cmd] = int(float(args[0]))
         elif cmd == "width": # float params
             data[cmd] = float(args[0])
+        elif cmd == "3d": # boolean params
+            data[cmd] = True
         elif cmd == "cmd":
             data["cmds"][args[0]] = (args[1], list(map(
                 convert_str,
