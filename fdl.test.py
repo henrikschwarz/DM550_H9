@@ -1,108 +1,108 @@
 """Tests fdl.py"""
 from fdl import apply, step, compute, flatten, parse
+def test(func, tests):
+    """
+    Executes a number of tests on a function.
+    `tests` is a list of lists, each representing one test.
+    The test lists are in the format [args, expected_outp]
+    """
+    success = True
+    for i, test in enumerate(tests):
+        val = func(*test[0])
+        expect = test[1]
+        if val != expect:
+            print("✕ Failed on test", i, val, "!=", expect)
+            success = False
+        else:
+            print("✓ Test",i)
+    return success
 
 print("== Apply")
-tests = (
-    (["A", "B"], ["F", "X", "Y"], [["A", "B"], "X", "Y"]),
-    (["A", "B"], ["X", "Y", "F"], ["X", "Y", ["A", "B"]]),
-    (["A", "B"], ["F"], [["A", "B"]]),
-    (["A", "B"], ["X", "Y"], ["X", "Y"]),
-    (["A", "B"], ["X", "F", "Y"], ["X", ["A", "B"], "Y"]),
-    (list("FLFRFLF"), list("FRFRF"), [
+test(apply, (
+    (("F", ["A", "B"], ["F", "X", "Y"]),
+        [["A", "B"], "X", "Y"]),
+    (("F", ["A", "B"], ["X", "Y", "F"]),
+        ["X", "Y", ["A", "B"]]),
+    (("F", ["A", "B"], ["F"]),
+        [["A", "B"]]),
+    (("F", ["A", "B"], ["X", "Y"]),
+        ["X", "Y"]),
+    (("F", ["A", "B"], ["X", "F", "Y"]),
+        ["X", ["A", "B"], "Y"]),
+    (("F", list("FLFRFLF"), list("FRFRF")), [
         ["F", "L", "F", "R", "F", "L", "F"],
         "R",
         ["F", "L", "F", "R", "F", "L", "F"],
         "R",
         ["F", "L", "F", "R", "F", "L", "F"]
     ])
-)
-for i, test in enumerate(tests):
-    val = apply("F", test[0], test[1])
-    expect = test[2]
-    if val != expect:
-        print("✕ Failed on test", i, val, "!=", expect)
-    else:
-        print("✓ Test", i)
-
+))
 
 print("== Step")
-tests = (
-    ( # first test
-        { # rules
-            "F": ["A", "B"],
-            "G": ["C", "D"]
-        },
-        list("FRGRF"), # state
-        list("ABRCDRAB") # expected
+test(step, (
+    (
+        (
+            {
+                "F": ["A", "B"],
+                "G": ["C", "D"]
+            },
+            list("FRGRF"),
+        ),
+        list("ABRCDRAB")
     ),
     (
-        {}, # rules
-        list("FRGRF"), # state
-        list("FRGRF") # expected
+        (
+            {},
+            list("FRGRF"),
+        ),
+        list("FRGRF")
     ),
     (
-        { # rules
-            "F": ["A", "B"],
-        },
-        list("GRG"), # state
-        list("GRG") # expected
+        (
+            {
+                "F": ["A", "B"],
+            },
+            list("GRG"),
+        ),
+        list("GRG")
     ),
-)
-for i, test in enumerate(tests):
-    val = step(test[0], test[1])
-    expect = test[2]
-    if val != expect:
-        print("✕ Failed on test", i, val, "!=", expect)
-    else:
-        print("✓ Test", i)
-
+))
 
 print("== Compute")
-tests = (
-    ( # first test
-        3, # depth
-        { # rules
-            "F": ["A", "F", "B"],
-            "G": ["F"]
-        },
-        list("FRG"), # state
+test(compute, (
+    (
+        (
+            3, # depth
+            { # rules
+                "F": ["A", "F", "B"],
+                "G": ["F"]
+            },
+            list("FRG"), # state
+        ),
         list("AAAFBBBRAAFBB") # expected
     ),
     (
-        0, # depth
-        { # rules
-            "F": ["A", "F", "B"],
-            "G": ["F"]
-        },
-        list("FRG"), # state
-        list("FRG") # expected
+        (
+            0,
+            {
+                "F": ["A", "F", "B"],
+                "G": ["F"]
+            },
+            list("FRG"),
+        ),
+        list("FRG")
     )
-)
-for i, test in enumerate(tests):
-    val = compute(test[0], test[1], test[2])
-    expect = test[3]
-    if val != expect:
-        print("✕ Failed on test", i, val, "!=", expect)
-    else:
-        print("✓ Test", i)
+))
 
 
 print("== Flatten")
-tests = (
-    ([1, 2, [3, 4]], [1, 2, 3, 4]),
-    ([1, 2, []], [1, 2]),
-    ([], []),
-    ([[1, 2], [3, 4]], [1, 2, 3, 4]),
-    ([[[1], 2], 3], [1, 2, 3])
-)
-for i, test in enumerate(tests):
-    val = flatten(test[0])
-    expect = test[1]
-    if val != expect:
-        print("✕ Failed on test", i, val, "!=", expect)
-    else:
-        print("✓ Test", i)
-
+test(flatten, (
+    [[[1, 2, [3, 4]]], [1, 2, 3, 4]],
+    [[[1, 2, []]], [1, 2]],
+    [[[]], []],
+    [[[[1, 2], [3, 4]]], [1, 2, 3, 4]],
+    [[[[[1], 2], 3]], [1, 2, 3]]
+))
 
 print("== Parse")
 tests = (
@@ -110,6 +110,7 @@ tests = (
         "files/dragon.fdl",
         {
             "start": ["F", "X"],
+            "3d": False,
             "length": 3,
             "depth": 13,
             "width": 1,

@@ -1,5 +1,4 @@
 """Contains FDL-related functions. Generally you only want `run`"""
-import turtle
 import colorsys
 from random import random
 
@@ -15,14 +14,14 @@ def flatten(nested_list):
     """Flattens a list"""
     flattened = []
     for val in nested_list:
-        if isinstance(val, list):
+        if isinstance(val, (list, tuple)):
             flattened.extend(flatten(val))
         else:
             flattened.append(val)
     return flattened
 
 def step(rules, state):
-    """Takes a state and a list of rules, applies rules to all states"""
+    """Takes a state and a dict of rules, applies rules to all states"""
     for ruleName, ruleDef in rules.items():
         state = apply(ruleName, ruleDef, state)
 
@@ -39,10 +38,10 @@ def execute(trtl, length, cmd, args):
     if cmd == "scale":
         return length * float(args[0])
     elif cmd == "nop":
-        return length
+        return None
     else:
         method = getattr(trtl, cmd)
-        if cmd in ["fd", "bk"]:
+        if cmd in ["fd", "bk", "forward", "backward"]:
             args = [float(length)]
         method(*args)
 
@@ -65,6 +64,7 @@ def parse(fdl_file):
     """
     file = open(fdl_file)
     data = {
+        "3d": False,
         "length": 1,
         "depth": 1,
         "width": 1.0,
@@ -82,6 +82,8 @@ def parse(fdl_file):
             data[cmd] = int(float(args[0]))
         elif cmd == "width": # float params
             data[cmd] = float(args[0])
+        elif cmd == "3d": # boolean params
+            data[cmd] = True
         elif cmd == "cmd":
             data["cmds"][args[0]] = (args[1], list(map(
                 convert_str,
@@ -93,7 +95,8 @@ def parse(fdl_file):
     return data
 
 def convert_str(string):
-    """Converts a string to whatever format matches first"""
+    """Converts a string to whatever format matches first
+    Currently only supports floats/integers"""
     try:
         if "." in string:
             return float(string)
@@ -105,6 +108,7 @@ def convert_str(string):
 def run(trtl, fdl):
     data = parse(fdl)
     length = data["length"]
+    # code to determine color and color loop length
     col = data["color"]
     colLen = 200
     if col:
@@ -125,7 +129,7 @@ def run(trtl, fdl):
     )
 
     # start drawing
-    dist = 0
+    dist = 0 # keep track of distance travelled in case color is "travelled"
     for cmdName in commands:
         cmd = data["cmds"][cmdName]
         if cmd[0] == "fd":
@@ -138,12 +142,14 @@ def run(trtl, fdl):
             trtl.pencolor(colorsys.hsv_to_rgb(trtl.distance(0, 0) % colLen / colLen, 1, 0.8))
         elif col == "travelled":
             trtl.pencolor(colorsys.hsv_to_rgb(dist % colLen / colLen, 1, 0.8))
+        
+        # actually execute the command
         result = execute(
             trtl=trtl,
             length=length,
             cmd=cmd[0],
             args=cmd[1]
         )
-
+        # handle the special command "scale"
         if cmd[0] == "scale":
             length = result
