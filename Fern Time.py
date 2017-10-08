@@ -13,14 +13,13 @@ def fern(t,x,d,angle,color,colorstep,s):
         fern(t,x/2.8,d-1,angle,color,colorstep,s)
         t.lt(90)
     t.bk(x)
-def run_fern(x,d,angle,speed2=0.3): #d is depth
+def run_fern(x,d,angle,s=0.3): #d is depth
     t = turtle.Turtle()
     """ Add speed as an optional last argument to increase drawing speed with graph details as tradeoff (set to 0.3)"""
     turtle.tracer(250,100)
     color = 0.3
-    s = speed2
     colorstep = (1 - color) / d
     fern(t,x,d,angle,color,colorstep,s)
     turtle.update()
     turtle.exitonclick()
-run_fern(100,12,98,0.3)
+run_fern(100,12,98)
