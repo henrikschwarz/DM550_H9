@@ -139,8 +139,10 @@ def run(trtl, fdl):
 
         # update colors if needed
         if col == "rainbow":
+            # if "rainbow", pick hue based on distance from home
             trtl.pencolor(colorsys.hsv_to_rgb(trtl.distance(0, 0) % colLen / colLen, 1, 0.8))
         elif col == "travelled":
+            # if "travelled", pick hue based on distance travelled
             trtl.pencolor(colorsys.hsv_to_rgb(dist % colLen / colLen, 1, 0.8))
         
         # actually execute the command
