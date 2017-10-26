@@ -1,10 +1,10 @@
 import turtle
 def fern(t,x,d,angle,color,colorstep,s):
     t.color([0,color,0])
-    if x < s: # s is speed
+    if x < s: # s is an optional parameter that sets a lower limit for the length drawn by the turtle
         return
     t.fd(x)
-    if d > 0:
+    if d > 0: #makes recursive fern calls until the maximum depth is reached
         t.lt(angle)
         fern(t,x/2.8,d-1,angle,color,colorstep,s)
         t.rt(90)
@@ -20,11 +20,13 @@ def warnings(x,d,angle,s):
     if angle < 75 or angle > 105:
         print("WARNING: large values of d has practically no effect on the branches visible to the eye."
               + '\n' + "Furthermore it causes issues with the color parameter, and could cause slow drawing speeds when paired with low values of s")
-    if d > 20:
+    if d > 30:
         print("WARNING: large values of d has practically no effect on the branches visible to the eye."
               + '\n' + "Furthermore it causes issues with the color parameter, and could cause slow drawing speeds when paired with low values of s")
     else:
         return
+#run_fern does precisely that, Runs the fern function.
+#  in addition it initializes the turtle and color parameter, and calls the warning function
 def run_fern(x,d,angle,s=0.3): #d is depth
     t = turtle.Turtle()
     """ Add speed as an optional last argument to increase drawing speed with graph details as tradeoff (set to 0.3)"""
@@ -35,7 +37,8 @@ def run_fern(x,d,angle,s=0.3): #d is depth
     turtle.update()
     turtle.exitonclick()
     warnings(x,d,angle,s)
-run_fern(100,21,98,3)
+
+run_fern(100,12,98,00)
 
 
 
