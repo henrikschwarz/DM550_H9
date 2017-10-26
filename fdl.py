@@ -41,7 +41,7 @@ def execute(trtl, length, cmd, args):
         return None
     else:
         method = getattr(trtl, cmd)
-        if cmd in ["fd", "bk", "forward", "backward"]:
+        if cmd in ("fd", "bk", "forward", "backward"):
             args = [float(length)]
         method(*args)
 
@@ -76,9 +76,9 @@ def parse(fdl_file):
         split = line.strip().split(" ")
         cmd = split[0].lower()
         args = split[1:]
-        if cmd in ["start", "color"]: # list params
+        if cmd in ("start", "color"): # list params
             data[cmd] = args
-        elif cmd in ["depth", "length"]: # int params
+        elif cmd in ("depth", "length"): # int params
             data[cmd] = int(float(args[0]))
         elif cmd == "width": # float params
             data[cmd] = float(args[0])
@@ -115,7 +115,7 @@ def run(trtl, fdl):
         if len(col) >= 2:
             colLen = int(col[1])
         col = col[0]
-    if col and col not in ["rainbow", "travelled"]:
+    if col and col not in ("rainbow", "travelled"):
         if col == "random":
             col = (random(), random(), random())
         trtl.pencolor(col)
@@ -133,9 +133,9 @@ def run(trtl, fdl):
     for cmdName in commands:
         cmd = data["cmds"][cmdName]
         if cmd[0] == "fd":
-            dist = dist + length
+            dist += length
         elif cmd[0] == "bk":
-            dist = dist - length
+            dist -= length
 
         # update colors if needed
         if col == "rainbow":
